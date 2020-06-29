@@ -8,9 +8,9 @@ namespace MagiApi.Controllers
     public class EventsController : ControllerBase
     {
         [HttpGet]
-        public JsonResult GetEvents()
+        public IActionResult GetEvents()
         {
-            return new JsonResult(new List<object>()
+            return new BadRequestObjectResult(new List<object>()
             {
                 new {id=1,Name="Event One"},
                 new {id=2,Name="Event Two"}
