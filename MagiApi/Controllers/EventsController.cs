@@ -10,7 +10,7 @@ namespace MagiApi.Controllers
         [HttpGet]
         public IActionResult GetEvents()
         {
-            return new BadRequestObjectResult(new List<object>()
+            return new OkObjectResult(new List<object>()
             {
                 new {id=1,Name="Event One"},
                 new {id=2,Name="Event Two"}
