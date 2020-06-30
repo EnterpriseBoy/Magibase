@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "C:\\Users\\maguiren\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\maguiren\\.nuget\\packages"
-    ]
-  }
-}
