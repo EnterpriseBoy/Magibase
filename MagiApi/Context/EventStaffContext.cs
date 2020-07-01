@@ -1,6 +1,7 @@
 ﻿using MagiApi.Entities;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace MagiApi.Context
 {
     public class EventStaffContext : DbContext

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
+
 namespace MagiApi.Migrations
 {
     public partial class EventStaffDatabaseSetup : Migration
