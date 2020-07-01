@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using MagiApi.Interfaces;
+using MagiApi.Services;
 
 namespace MagiApi
 {
@@ -20,14 +22,14 @@ namespace MagiApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = "Data Source=NIALL-LAPTOP;Initial Catalog=EventStaff;Integrated Security=True;";
-
             services.AddControllers();
 
             services.AddDbContext<EventStaffContext>(options => 
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(Configuration["connectionStrings:eventStaffConnectionString"]);
             });
+
+            services.AddScoped<IEventRepository, EventRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
