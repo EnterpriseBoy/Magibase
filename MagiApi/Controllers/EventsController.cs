@@ -30,7 +30,8 @@ namespace MagiApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetEvent(int id)
         {
-            return new OkObjectResult(_eventRepository.GetEvent(id));
+            var eventEntity = _eventRepository.GetEvent(id);
+            return new OkObjectResult(_mapper.Map<EventDto>(eventEntity));
         }
     }
 }
