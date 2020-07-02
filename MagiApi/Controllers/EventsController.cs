@@ -1,4 +1,7 @@
-﻿using MagiApi.Interfaces;
+﻿using AutoMapper;
+using MagiApi.Entities;
+using MagiApi.Interfaces;
+using MagiApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,16 +12,19 @@ namespace MagiApi.Controllers
     [Route("[controller]")]
     public class EventsController : ControllerBase
     {
-        private IEventRepository _eventRepository;
+        private readonly IEventRepository _eventRepository;
+        private readonly IMapper _mapper;
 
-        public EventsController(IEventRepository eventRepository)
+        public EventsController(IEventRepository eventRepository,IMapper mapper)
         {
             _eventRepository = eventRepository ?? throw new ArgumentException(nameof(eventRepository));
+            _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
         [HttpGet]
         public IActionResult GetEvents()
         {
-            return new OkObjectResult(_eventRepository.GetEvents());
+            var eventEntities = _eventRepository.GetEvents();
+            return new OkObjectResult(_mapper.Map<IEnumerable<EventDto>>(eventEntities));
         }
 
         [HttpGet("{id}")]

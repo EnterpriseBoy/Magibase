@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MagiApi.Interfaces;
 using MagiApi.Services;
+using AutoMapper;
+using System;
 
 namespace MagiApi
 {
@@ -30,6 +32,7 @@ namespace MagiApi
             });
 
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
