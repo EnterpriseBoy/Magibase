@@ -6,7 +6,9 @@ namespace MagiApi.Context
 {
     public class EventStaffContext : DbContext
     {
-        public EventStaffContext(DbContextOptions<EventStaffContext> options): base(options){}
+        public EventStaffContext(DbContextOptions<EventStaffContext> options): base(options)
+        {
+        }
 
         public DbSet<Event> Events { get; set; }
     }

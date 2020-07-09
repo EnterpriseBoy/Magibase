@@ -10,6 +10,7 @@ using MagiApi.Interfaces;
 using MagiApi.Services;
 using AutoMapper;
 using System;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace MagiApi
 {
@@ -24,7 +25,10 @@ namespace MagiApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(setupAction => 
+            {
+                setupAction.ReturnHttpNotAcceptable = true;
+            }).AddXmlDataContractSerializerFormatters();
 
             services.AddDbContext<EventStaffContext>(options => 
             {
@@ -41,9 +45,7 @@ namespace MagiApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
+            //Controls routing decisions
             app.UseRouting();
 
             app.UseAuthorization();

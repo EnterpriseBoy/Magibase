@@ -3,14 +3,16 @@ using MagiApi.Entities;
 using MagiApi.Interfaces;
 using MagiApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
 namespace MagiApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class EventsController : ControllerBase
+    [Route("api/events")]
+    //Inherit controller base as that does not have support for views
+    public class EventsController : ControllerBase 
     {
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
@@ -24,14 +26,29 @@ namespace MagiApi.Controllers
         public IActionResult GetEvents()
         {
             var eventEntities = _eventRepository.GetEvents();
-            return new OkObjectResult(_mapper.Map<IEnumerable<EventDto>>(eventEntities));
+            return Ok(_mapper.Map<IEnumerable<EventDto>>(eventEntities));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name ="GetEvent")]
         public IActionResult GetEvent(int id)
         {
             var eventEntity = _eventRepository.GetEvent(id);
+
+            if (eventEntity == null)
+                return NotFound();
+
             return new OkObjectResult(_mapper.Map<EventDto>(eventEntity));
+        }
+
+        [HttpPost]
+        public IActionResult CreateEvent([FromBody]EventCreateDto eventCreateDto)
+        {
+            var eventEntity = _mapper.Map<Entities.Event>(eventCreateDto);
+            _eventRepository.AddEvent(eventEntity);
+            _eventRepository.Save();
+            var eventToReturn = _mapper.Map<EventDto>(eventEntity);
+            return CreatedAtRoute("GetEvent",
+                new { eventId = eventToReturn.Id }, eventToReturn);
         }
     }
 }

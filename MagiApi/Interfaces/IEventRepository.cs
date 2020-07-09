@@ -7,5 +7,8 @@ namespace MagiApi.Interfaces
     {
         IEnumerable<Event> GetEvents();
         Event GetEvent(int eventId);
+        bool EventExists(int eventId);
+        void AddEvent(Event eventEntity);
+        bool Save();
     }
 }
