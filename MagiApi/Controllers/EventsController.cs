@@ -23,10 +23,11 @@ namespace MagiApi.Controllers
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
         [HttpGet]
-        public IActionResult GetEvents()
+        public ActionResult<IEnumerable<User>> GetEvents()
         {
             var eventEntities = _eventRepository.GetEvents();
-            return Ok(_mapper.Map<IEnumerable<EventDto>>(eventEntities));
+            //_mapper.Map returns the type we want back and we pass in Source
+            return Ok(_mapper.Map<IEnumerable<User>>(eventEntities));
         }
 
         [HttpGet("{id}", Name ="GetEvent")]
@@ -37,7 +38,7 @@ namespace MagiApi.Controllers
             if (eventEntity == null)
                 return NotFound();
 
-            return new OkObjectResult(_mapper.Map<EventDto>(eventEntity));
+            return new OkObjectResult(_mapper.Map<User>(eventEntity));
         }
 
         [HttpPost]
@@ -46,7 +47,7 @@ namespace MagiApi.Controllers
             var eventEntity = _mapper.Map<Entities.Event>(eventCreateDto);
             _eventRepository.AddEvent(eventEntity);
             _eventRepository.Save();
-            var eventToReturn = _mapper.Map<EventDto>(eventEntity);
+            var eventToReturn = _mapper.Map<User>(eventEntity);
             return CreatedAtRoute("GetEvent",
                 new { eventId = eventToReturn.Id }, eventToReturn);
         }

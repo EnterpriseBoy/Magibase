@@ -36,6 +36,7 @@ namespace MagiApi
             });
 
             services.AddScoped<IEventRepository, EventRepository>();
+            //AppDomain.CurrentDoain.GetAssemblies() scans for assemblies to add
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
