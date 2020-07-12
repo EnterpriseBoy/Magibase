@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MagiApi.Interfaces;
+using MagiApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace MagiApi.Controllers
 {
+    [ApiController]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -17,6 +20,14 @@ namespace MagiApi.Controllers
         {
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
             _userRepository = userRepository ?? throw new ArgumentException(nameof(userRepository));
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<UserDto>> GetUsers() 
+        {
+            var userEntities = _userRepository.GetUsers();
+            //_mapper.Map returns the type we want back and we pass in Source
+            return Ok(_mapper.Map<IEnumerable<User>>(userEntities));
         }
     }
 }
