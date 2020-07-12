@@ -29,5 +29,16 @@ namespace MagiApi.Controllers
             //_mapper.Map returns the type we want back and we pass in Source
             return Ok(_mapper.Map<IEnumerable<User>>(userEntities));
         }
+
+        [HttpGet("{id}", Name = "GetUser")]
+        public ActionResult<UserDto>GetUser(int id)
+        {
+            var userEntity = _userRepository.GetUser(id);
+
+            if (userEntity == null)
+                return NotFound();
+
+            return new OkObjectResult(_mapper.Map<User>(userEntity));
+        }
     }
 }
