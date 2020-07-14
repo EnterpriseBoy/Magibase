@@ -6,7 +6,8 @@ namespace MagiApi.Profiles
     {
         public EventProfile()
         {
-            CreateMap<Entities.Event, Models.User>();
+            CreateMap<Entities.Event, Models.EventDto>();
+            CreateMap<Models.EventCreateDto,Entities.Event>();
         }
     }
 }

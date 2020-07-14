@@ -23,6 +23,7 @@ namespace MagiApi.Controllers
         }
 
         [HttpGet]
+        [HttpHead]
         public ActionResult<IEnumerable<UserDto>> GetUsers() 
         {
             var userEntities = _userRepository.GetUsers();
@@ -31,6 +32,7 @@ namespace MagiApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUser")]
+        [HttpHead]
         public ActionResult<UserDto>GetUser(int id)
         {
             var userEntity = _userRepository.GetUser(id);

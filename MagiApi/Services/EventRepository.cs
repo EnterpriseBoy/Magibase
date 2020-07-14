@@ -16,10 +16,7 @@ namespace MagiApi.Services
             _context = eventStaffContext?? throw new ArgumentNullException(nameof(eventStaffContext));
         }
 
-        public void AddEvent(Event eventEntity)
-        {
-            _context.Add(eventEntity);
-        }
+
 
         public Event GetEvent(int eventId)
         {
@@ -41,6 +38,10 @@ namespace MagiApi.Services
             return _context.Events.Any(a => a.Id == eventId);
         }
 
+        public void AddEvent(Event eventEntity)
+        {
+            _context.Add(eventEntity);
+        }
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

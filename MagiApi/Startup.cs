@@ -41,6 +41,7 @@ namespace MagiApi
 
             //AppDomain.CurrentDoain.GetAssemblies() scans for assemblies to add
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,6 +59,7 @@ namespace MagiApi
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

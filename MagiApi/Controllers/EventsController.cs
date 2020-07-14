@@ -3,7 +3,6 @@ using MagiApi.Entities;
 using MagiApi.Interfaces;
 using MagiApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -23,14 +22,16 @@ namespace MagiApi.Controllers
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetEvents()
+        [HttpHead]
+        public ActionResult<IEnumerable<Event>> GetEvents()
         {
             var eventEntities = _eventRepository.GetEvents();
             //_mapper.Map returns the type we want back and we pass in Source
-            return Ok(_mapper.Map<IEnumerable<User>>(eventEntities));
+            return Ok(_mapper.Map<IEnumerable<Event>>(eventEntities));
         }
 
-        [HttpGet("{id}", Name ="GetEvent")]
+        [HttpGet("{id}", Name = "GetEvent")]
+        [HttpHead]
         public IActionResult GetEvent(int id)
         {
             var eventEntity = _eventRepository.GetEvent(id);
@@ -38,18 +39,20 @@ namespace MagiApi.Controllers
             if (eventEntity == null)
                 return NotFound();
 
-            return new OkObjectResult(_mapper.Map<User>(eventEntity));
+            return new OkObjectResult(_mapper.Map<Event>(eventEntity));
         }
 
+        //As a complex type this comes from the Body by default
         [HttpPost]
-        public IActionResult CreateEvent([FromBody]EventCreateDto eventCreateDto)
+        public ActionResult<EventDto> CreateEvent([FromBody] EventCreateDto eventCreateDto)
         {
-            var eventEntity = _mapper.Map<Entities.Event>(eventCreateDto);
+            var eventEntity = _mapper.Map<Event>(eventCreateDto);
             _eventRepository.AddEvent(eventEntity);
             _eventRepository.Save();
-            var eventToReturn = _mapper.Map<User>(eventEntity);
-            return CreatedAtRoute("GetEvent",
-                new { eventId = eventToReturn.Id }, eventToReturn);
+            
+            var eventToReturn = _mapper.Map<EventDto>(eventEntity);
+            
+            return CreatedAtRoute("GetEvent",new { id = eventToReturn.Id }, eventToReturn);
         }
     }
 }
