@@ -16,11 +16,9 @@ namespace MagiApi.Services
             _context = eventStaffContext?? throw new ArgumentNullException(nameof(eventStaffContext));
         }
 
-
-
         public Event GetEvent(int eventId)
         {
-            return _context.Events.FirstOrDefault(x => x.Id == eventId);
+            return _context.Events.FirstOrDefault(x => x.EventId == eventId);
         }
 
         public IEnumerable<Event> GetEvents()
@@ -35,7 +33,7 @@ namespace MagiApi.Services
                 throw new ArgumentNullException(nameof(eventId));
             }
 
-            return _context.Events.Any(a => a.Id == eventId);
+            return _context.Events.Any(a => a.EventId == eventId);
         }
 
         public void AddEvent(Event eventEntity)

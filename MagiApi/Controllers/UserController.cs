@@ -14,9 +14,9 @@ namespace MagiApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
+        private readonly IParticipantRepository _userRepository;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IParticipantRepository userRepository, IMapper mapper)
         {
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
             _userRepository = userRepository ?? throw new ArgumentException(nameof(userRepository));
@@ -26,21 +26,21 @@ namespace MagiApi.Controllers
         [HttpHead]
         public ActionResult<IEnumerable<UserDto>> GetUsers() 
         {
-            var userEntities = _userRepository.GetUsers();
+            var participantsEntities = _userRepository.GetParticipants();
             //_mapper.Map returns the type we want back and we pass in Source
-            return Ok(_mapper.Map<IEnumerable<User>>(userEntities));
+            return Ok(_mapper.Map<IEnumerable<Participant>>(participantsEntities));
         }
 
         [HttpGet("{id}", Name = "GetUser")]
         [HttpHead]
         public ActionResult<UserDto>GetUser(int id)
         {
-            var userEntity = _userRepository.GetUser(id);
+            var userEntity = _userRepository.GetParticipant(id);
 
             if (userEntity == null)
                 return NotFound();
 
-            return new OkObjectResult(_mapper.Map<User>(userEntity));
+            return new OkObjectResult(_mapper.Map<Participant>(userEntity));
         }
     }
 }

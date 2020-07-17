@@ -4,14 +4,16 @@ using MagiApi.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MagiApi.Migrations
 {
     [DbContext(typeof(EventStaffContext))]
-    partial class EventStaffContextModelSnapshot : ModelSnapshot
+    [Migration("20200717223651_rename_user_table_participant")]
+    partial class rename_user_table_participant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,9 +90,6 @@ namespace MagiApi.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
@@ -103,8 +102,6 @@ namespace MagiApi.Migrations
 
                     b.HasKey("ParticipantId");
 
-                    b.HasIndex("EventId");
-
                     b.ToTable("Participants");
                 });
 
@@ -113,15 +110,6 @@ namespace MagiApi.Migrations
                     b.HasOne("MagiApi.Entities.Event", "Event")
                         .WithOne("Location")
                         .HasForeignKey("MagiApi.Entities.Location", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MagiApi.Models.Participant", b =>
-                {
-                    b.HasOne("MagiApi.Entities.Event", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

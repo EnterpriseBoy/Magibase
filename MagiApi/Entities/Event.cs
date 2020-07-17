@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MagiApi.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MagiApi.Entities
@@ -7,11 +10,21 @@ namespace MagiApi.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int EventId { get; set; }
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string First_Name { get; set; }
         [MaxLength(200)]
         public string Description { get; set; }
+        [MaxLength(2000)]
+        public string Comments { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
+        [Required]
+        public DateTime EndDate { get; set; }
+
+        public List<Participant> Participants { get; set; }
+        public Location Location { get; set; }
+
     }
 }

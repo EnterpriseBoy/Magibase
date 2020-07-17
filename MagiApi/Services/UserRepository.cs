@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MagiApi.Services
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IParticipantRepository
     {
         private EventStaffContext _context;
 
@@ -17,24 +17,24 @@ namespace MagiApi.Services
             _context = eventStaffContext?? throw new ArgumentNullException(nameof(eventStaffContext));
         }
 
-        public User GetUser(int eventId)
+        public Participant GetParticipant(int participantId)
         {
-            return _context.Users.FirstOrDefault(x => x.Id == eventId);
+            return _context.Participants.FirstOrDefault(x => x.ParticipantId == participantId);
         }
 
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<Participant> GetParticipants()
         {
-            return _context.Users.ToList();
+            return _context.Participants.ToList();
         }
 
-        public bool UserExists(int userId)
+        public bool ParticipantExists(int participantId)
         {
-            if (userId.Equals(null))
+            if (participantId.Equals(null))
             {
-                throw new ArgumentNullException(nameof(userId));
+                throw new ArgumentNullException(nameof(participantId));
             }
 
-            return _context.Users.Any(a => a.Id == userId);
+            return _context.Participants.Any(a => a.ParticipantId == participantId);
         }
 
         public bool Save()
@@ -42,7 +42,7 @@ namespace MagiApi.Services
             return (_context.SaveChanges() >= 0);
         }
 
-        public void AddUser(User userEntity)
+        public void AddParticipant(Participant participantEntity)
         {
             throw new NotImplementedException();
         }

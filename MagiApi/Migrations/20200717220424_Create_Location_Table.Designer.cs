@@ -4,14 +4,16 @@ using MagiApi.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MagiApi.Migrations
 {
     [DbContext(typeof(EventStaffContext))]
-    partial class EventStaffContextModelSnapshot : ModelSnapshot
+    [Migration("20200717220424_Create_Location_Table")]
+    partial class Create_Location_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,9 +52,9 @@ namespace MagiApi.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("MagiApi.Entities.Location", b =>
+            modelBuilder.Entity("MagiApi.Models.User", b =>
                 {
-                    b.Property<int>("LocationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -60,70 +62,15 @@ namespace MagiApi.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.HasKey("LocationId");
-
-                    b.HasIndex("EventId")
-                        .IsUnique();
-
-                    b.ToTable("Locations");
-                });
-
-            modelBuilder.Entity("MagiApi.Models.Participant", b =>
-                {
-                    b.Property<int>("ParticipantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.HasKey("Id");
 
-                    b.HasKey("ParticipantId");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("Participants");
-                });
-
-            modelBuilder.Entity("MagiApi.Entities.Location", b =>
-                {
-                    b.HasOne("MagiApi.Entities.Event", "Event")
-                        .WithOne("Location")
-                        .HasForeignKey("MagiApi.Entities.Location", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MagiApi.Models.Participant", b =>
-                {
-                    b.HasOne("MagiApi.Entities.Event", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

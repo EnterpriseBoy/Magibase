@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200717223622_rename_user_table_participant.cs" />
+    <Compile Remove="Migrations\20200717223622_rename_user_table_participant.Designer.cs" />
     <Compile Remove="WeatherForecast.cs" />
   </ItemGroup>
 

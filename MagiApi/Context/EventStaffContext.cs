@@ -12,6 +12,7 @@ namespace MagiApi.Context
         }
 
         public DbSet<Event> Events { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Participant> Participants { get; set; }
+        public DbSet<Location> Locations { get; set; }
     }
 }

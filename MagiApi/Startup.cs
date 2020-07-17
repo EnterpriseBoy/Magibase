@@ -37,7 +37,7 @@ namespace MagiApi
 
             //Mapping repositories
             services.AddScoped<IEventRepository, EventRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IParticipantRepository, UserRepository>();
 
             //AppDomain.CurrentDoain.GetAssemblies() scans for assemblies to add
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
