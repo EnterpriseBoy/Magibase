@@ -4,14 +4,16 @@ using MagiApi.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MagiApi.Migrations
 {
     [DbContext(typeof(EventStaffContext))]
-    partial class EventStaffContextModelSnapshot : ModelSnapshot
+    [Migration("20200718210333_add_link_participant_user")]
+    partial class add_link_participant_user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,27 +79,6 @@ namespace MagiApi.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("MagiApi.Entities.Organizer", b =>
-                {
-                    b.Property<int>("OragnizerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OragnizerId");
-
-                    b.HasIndex("EventId")
-                        .IsUnique();
-
-                    b.ToTable("Organizers");
-                });
-
             modelBuilder.Entity("MagiApi.Entities.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -149,15 +130,6 @@ namespace MagiApi.Migrations
                     b.HasOne("MagiApi.Entities.Event", "Event")
                         .WithOne("Location")
                         .HasForeignKey("MagiApi.Entities.Location", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MagiApi.Entities.Organizer", b =>
-                {
-                    b.HasOne("MagiApi.Entities.Event", null)
-                        .WithOne("Organizer")
-                        .HasForeignKey("MagiApi.Entities.Organizer", "EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
