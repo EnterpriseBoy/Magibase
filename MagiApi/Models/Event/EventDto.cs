@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MagiApi.Models
+﻿namespace MagiApi.Models
 {
     public class EventDto
     {

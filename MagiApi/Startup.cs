@@ -1,15 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MagiApi.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using MagiApi.Interfaces;
+using MagiApi.Services;
+using AutoMapper;
+using System;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace MagiApi
 {
@@ -22,22 +23,34 @@ namespace MagiApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(setupAction => 
+            {
+                setupAction.ReturnHttpNotAcceptable = true;
+            }).AddXmlDataContractSerializerFormatters();
+
+            services.AddDbContext<EventStaffContext>(options => 
+            {
+                options.UseSqlServer(Configuration["connectionStrings:eventStaffConnectionString"]);
+            });
+
+            //Mapping repositories
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IParticipantRepository, UserRepository>();
+
+            //AppDomain.CurrentDoain.GetAssemblies() scans for assemblies to add
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
+            //Controls routing decisions
             app.UseRouting();
 
             app.UseAuthorization();
@@ -46,6 +59,7 @@ namespace MagiApi
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }
