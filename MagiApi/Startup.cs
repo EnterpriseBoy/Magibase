@@ -5,12 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using MagiApi.Interfaces;
 using MagiApi.Services;
 using AutoMapper;
 using System;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Linq;
+using MagiApi.Migrations;
 
 namespace MagiApi
 {
@@ -25,12 +25,12 @@ namespace MagiApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(setupAction => 
+            services.AddControllers(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;
             }).AddXmlDataContractSerializerFormatters();
 
-            services.AddDbContext<EventStaffContext>(options => 
+            services.AddDbContext<EventStaffContext>(options =>
             {
                 options.UseSqlServer(Configuration["connectionStrings:eventStaffConnectionString"]);
             });
@@ -41,6 +41,17 @@ namespace MagiApi
 
             //AppDomain.CurrentDoain.GetAssemblies() scans for assemblies to add
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc("LibraryOpenApiSpecification", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "MagiServerApi",
+                    Version = "1"
+
+                });
+                setupAction.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+            });
 
         }
 
@@ -58,6 +69,13 @@ namespace MagiApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(setupAction =>
+            {
+                setupAction.SwaggerEndpoint("/swagger/LibraryOpenApiSpecification/swagger.json", "Magiserver API");
+                setupAction.RoutePrefix = "";
             });
 
         }

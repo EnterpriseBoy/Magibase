@@ -22,9 +22,9 @@ namespace MagiApi.Controllers
             _userRepository = userRepository ?? throw new ArgumentException(nameof(userRepository));
         }
 
-        [HttpGet]
+        [HttpGet()]
         [HttpHead]
-        public ActionResult<IEnumerable<UserDto>> GetUsers() 
+        public ActionResult<IEnumerable<UserDto>> GetUsers()
         {
             var participantsEntities = _userRepository.GetParticipants();
             //_mapper.Map returns the type we want back and we pass in Source
