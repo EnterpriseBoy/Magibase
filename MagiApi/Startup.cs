@@ -11,6 +11,9 @@ using AutoMapper;
 using System;
 using System.Linq;
 using MagiApi.Migrations;
+using System.Reflection;
+using System.IO;
+using System.Security.Policy;
 
 namespace MagiApi
 {
@@ -47,10 +50,26 @@ namespace MagiApi
                 setupAction.SwaggerDoc("LibraryOpenApiSpecification", new Microsoft.OpenApi.Models.OpenApiInfo()
                 {
                     Title = "MagiServerApi",
-                    Version = "1"
-
+                    Version = "1",
+                    Description="API to manager Events",
+                    Contact= new Microsoft.OpenApi.Models.OpenApiContact()
+                    {
+                        Email = "niall.maguire@zoho.com",
+                        Name = "Niall Maguire",
+                        Url = new Uri("Http://www.google.com")
+                    },
+                    License = new Microsoft.OpenApi.Models.OpenApiLicense()
+                    {
+                        Name = "MIT Licecne",
+                        Url = new Uri("https://opensource.org/licences/MIT")
+                    }
                 });
                 setupAction.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
+                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var commentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+                setupAction.IncludeXmlComments(commentsFullPath);
+
             });
 
         }
@@ -72,6 +91,7 @@ namespace MagiApi
             });
 
             app.UseSwagger();
+
             app.UseSwaggerUI(setupAction =>
             {
                 setupAction.SwaggerEndpoint("/swagger/LibraryOpenApiSpecification/swagger.json", "Magiserver API");

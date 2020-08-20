@@ -1,28 +1,44 @@
 ﻿using AutoMapper;
 using MagiApi.Entities;
 using MagiApi.Interfaces;
-using MagiApi.Models;
+using MagiApi.Models.Event;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
 namespace MagiApi.Controllers
 {
+    /// <summary>
+    /// Events Controller for Event related actions
+    /// </summary>
+    [Produces("application/json")]
     [ApiController]
     [Route("api/events")]
-    //Inherit controller base as that does not have support for views
-    public class EventsController : ControllerBase 
+    public class EventsController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
-
-        public EventsController(IEventRepository eventRepository,IMapper mapper)
+        /// <summary>
+        /// s
+        /// </summary>
+        /// <param name="eventRepository"></param>
+        /// <param name="mapper"></param>
+        public EventsController(IEventRepository eventRepository, IMapper mapper)
         {
             _eventRepository = eventRepository ?? throw new ArgumentException(nameof(eventRepository));
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
+
+        /// <summary>
+        /// Returns all the events
+        /// </summary>
+        /// <returns>List of Event Objects </returns>
+        /// <response code ="200"> Returns the list of events</response>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Event))]
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
-        [HttpHead]
         public ActionResult<IEnumerable<Event>> GetEvents()
         {
             var eventEntities = _eventRepository.GetEvents();
@@ -30,9 +46,17 @@ namespace MagiApi.Controllers
             return Ok(_mapper.Map<IEnumerable<Event>>(eventEntities));
         }
 
+        /// <summary>
+        /// Returns one event
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code ="200"> Returns an Event</response>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EventDto))]
         [HttpGet("{id}", Name = "GetEvent")]
-        [HttpHead]
-        public IActionResult GetEvent(int id)
+        public ActionResult<Event> GetEvent(int id)
         {
             var eventEntity = _eventRepository.GetEvent(id);
 
@@ -42,7 +66,24 @@ namespace MagiApi.Controllers
             return new OkObjectResult(_mapper.Map<Event>(eventEntity));
         }
 
-        //As a complex type this comes from the Body by default
+        /// <summary>
+        /// Creates an Event
+        /// </summary>
+        /// <param name="eventCreateDto"></param>
+        /// <returns>Created Event details</returns>
+        /// <remarks>
+        /// Sample request (This request adds an **Event**)  
+        ///     POST /events/id  
+        ///     [  
+        ///         {  
+        ///         }  
+        ///     ]  
+        /// </remarks>
+        /// <response code ="200"> Returns the list of events</response>
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EventDto))]
         [HttpPost]
         public ActionResult<EventDto> CreateEvent([FromBody] EventCreateDto eventCreateDto)
         {

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MagiApi</name>
+    </assembly>
+    <members>
+        <member name="T:MagiApi.Controllers.EventsController">
+            <summary>
+            Events Controller for Event related actions
+            </summary>
+        </member>
+        <member name="M:MagiApi.Controllers.EventsController.#ctor(MagiApi.Interfaces.IEventRepository,AutoMapper.IMapper)">
+            <summary>
+            s
+            </summary>
+            <param name="eventRepository"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:MagiApi.Controllers.EventsController.GetEvents">
+            <summary>
+            Returns all the events
+            </summary>
+            <returns>List of Event Objects </returns>
+            <response code ="200"> Returns the list of events</response>
+        </member>
+        <member name="M:MagiApi.Controllers.EventsController.GetEvent(System.Int32)">
+            <summary>
+            Returns one event
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code ="200"> Returns an Event</response>
+        </member>
+        <member name="M:MagiApi.Controllers.EventsController.CreateEvent(MagiApi.Models.Event.EventCreateDto)">
+            <summary>
+            Creates an Event
+            </summary>
+            <param name="eventCreateDto"></param>
+            <returns>Created Event details</returns>
+            <remarks>
+            Sample request (This request adds an **Event**)  
+                POST /events/id  
+                [  
+                    {  
+                    }  
+                ]  
+            </remarks>
+            <response code ="200"> Returns the list of events</response>
+        </member>
+        <member name="T:MagiApi.Models.Event.EventCreateDto">
+            <summary>
+            Event Creat Class
+            </summary>
+        </member>
+        <member name="P:MagiApi.Models.Event.EventCreateDto.Name">
+            <summary>
+            Name required Max Lenght 50
+            </summary>
+        </member>
+        <member name="P:MagiApi.Models.Event.EventCreateDto.Description">
+            <summary>
+            Description required Max Lenght 200
+            </summary>
+        </member>
+        <member name="T:MagiApi.Models.Event.EventDto">
+            <summary>
+            Event with an Name and Descrptoin
+            </summary>
+        </member>
+        <member name="P:MagiApi.Models.Event.EventDto.Id">
+            <summary>
+            Id of the event
+            </summary>
+        </member>
+        <member name="P:MagiApi.Models.Event.EventDto.Name">
+            <summary>
+            Name of the event
+            </summary>
+        </member>
+        <member name="P:MagiApi.Models.Event.EventDto.Description">
+            <summary>
+            Description of the event
+            </summary>
+        </member>
+    </members>
+</doc>

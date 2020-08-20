@@ -15,6 +15,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "Project",
+      "launchBrowser": true,
       "launchUrl": "Events",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -24,7 +25,7 @@
     "MagiApi": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "Events",
+      "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

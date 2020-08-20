@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MagiApi.Controllers
 {
+    [Produces("application/json")]
     [ApiController]
     [Route("api/users")]
     public class UserController : ControllerBase
@@ -32,6 +33,7 @@ namespace MagiApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUser")]
+        //[ApiExplorerSettings(IgnoreApi = true)]
         [HttpHead]
         public ActionResult<UserDto>GetUser(int id)
         {
