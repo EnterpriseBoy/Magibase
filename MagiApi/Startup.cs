@@ -11,6 +11,7 @@ using MagiApi.Services;
 using AutoMapper;
 using System;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Identity;
 
 namespace MagiApi
 {
@@ -34,6 +35,14 @@ namespace MagiApi
             {
                 options.UseSqlServer(Configuration["connectionStrings:eventStaffConnectionString"]);
             });
+
+            services.Configure<IdentityOptions>(options => 
+            {
+                options.Password.RequireNonAlphanumeric = false;
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<EventStaffContext>();
 
             //Mapping repositories
             services.AddScoped<IEventRepository, EventRepository>();

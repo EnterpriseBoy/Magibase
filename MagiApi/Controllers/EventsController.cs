@@ -2,6 +2,7 @@
 using MagiApi.Entities;
 using MagiApi.Interfaces;
 using MagiApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,9 @@ namespace MagiApi.Controllers
             _eventRepository = eventRepository ?? throw new ArgumentException(nameof(eventRepository));
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
+
+        [Authorize]
         [HttpGet]
-        [HttpHead]
         public ActionResult<IEnumerable<Event>> GetEvents()
         {
             var eventEntities = _eventRepository.GetEvents();
@@ -30,6 +32,7 @@ namespace MagiApi.Controllers
             return Ok(_mapper.Map<IEnumerable<Event>>(eventEntities));
         }
 
+        [Authorize]
         [HttpGet("{id}", Name = "GetEvent")]
         [HttpHead]
         public IActionResult GetEvent(int id)

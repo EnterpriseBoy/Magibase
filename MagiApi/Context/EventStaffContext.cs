@@ -1,11 +1,11 @@
 ﻿using MagiApi.Entities;
 using MagiApi.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace MagiApi.Context
 {
-    public class EventStaffContext : DbContext
+    public class EventStaffContext : IdentityDbContext
     {
         public EventStaffContext(DbContextOptions<EventStaffContext> options): base(options)
         {
