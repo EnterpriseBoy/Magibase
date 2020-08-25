@@ -12,6 +12,7 @@ using AutoMapper;
 using System;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MagiApi
 {
@@ -26,23 +27,30 @@ namespace MagiApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(setupAction => 
+            services.AddControllers(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;
             }).AddXmlDataContractSerializerFormatters();
 
-            services.AddDbContext<EventStaffContext>(options => 
+            services.AddDbContext<EventStaffContext>(options =>
             {
                 options.UseSqlServer(Configuration["connectionStrings:eventStaffConnectionString"]);
             });
 
-            services.Configure<IdentityOptions>(options => 
+            services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<EventStaffContext>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = new TimeSpan(0, 10, 0);
+                });
 
             //Mapping repositories
             services.AddScoped<IEventRepository, EventRepository>();
@@ -61,6 +69,8 @@ namespace MagiApi
             }
             //Controls routing decisions
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

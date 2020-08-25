@@ -1,6 +1,10 @@
 ﻿using MagiApi.Models.User;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MagiApi.Controllers
@@ -53,20 +57,54 @@ namespace MagiApi.Controllers
 
         [HttpPost]
         [Route("api/login")]
-        public async Task<ContentResult> Login([FromBody] UserAccess userAccess)
+        public async Task<ContentResult> Login([FromBody] UserAccess credentials)
         {
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid || credentials == null)
             {
-                var result = await _signInManager.PasswordSignInAsync(userAccess.Username,userAccess.Password,false,false);
-
-                if (result.Succeeded)
-                {
-                    return Content("you are signed in");
-                }
-
-                return Content("login Failed");
+                return Content("Login failed" );
             }
-            return Content("Feck off");
+
+            var identityUser = await _userManager.FindByNameAsync(credentials.Username);
+            if (identityUser == null)
+            {
+                return Content("Login failed");
+            }
+
+            var result = _userManager.PasswordHasher.VerifyHashedPassword(identityUser, identityUser.PasswordHash, credentials.Password);
+            if (result == PasswordVerificationResult.Failed)
+            {
+                return Content("Login failed");
+            }
+
+            var claims = new List<Claim>
+            {
+                //new Claim(ClaimTypes.Email, identityUser.Email),
+                new Claim(ClaimTypes.Name, identityUser.UserName)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity));
+
+            return Content("Login failed");
+
+
+            //if (ModelState.IsValid)
+            //{
+            //    var result = await _signInManager.PasswordSignInAsync(userAccess.Username,userAccess.Password,false,false);
+
+            //    if (result.Succeeded)
+            //    {
+            //        return Content("you are signed in");
+            //    }
+
+            //    return Content("login Failed");
+            //}
+            //return Content("Feck off");
         }
 
     }

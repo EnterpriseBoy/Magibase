@@ -2,6 +2,7 @@
 using MagiApi.Entities;
 using MagiApi.Interfaces;
 using MagiApi.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,7 +24,7 @@ namespace MagiApi.Controllers
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet]
         public ActionResult<IEnumerable<Event>> GetEvents()
         {
