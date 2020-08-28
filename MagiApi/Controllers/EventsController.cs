@@ -24,6 +24,7 @@ namespace MagiApi.Controllers
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet]
         public ActionResult<IEnumerable<Event>> GetEvents()
@@ -48,6 +49,7 @@ namespace MagiApi.Controllers
 
         //As a complex type this comes from the Body by default
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<EventDto> CreateEvent([FromBody] EventCreateDto eventCreateDto)
         {
             var eventEntity = _mapper.Map<Event>(eventCreateDto);

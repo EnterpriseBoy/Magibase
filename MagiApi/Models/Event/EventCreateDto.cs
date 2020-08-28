@@ -14,5 +14,9 @@ namespace MagiApi.Models
         [Required]
         [MaxLength (200)]
         public string Description { get; set; }
+        [MaxLength(50)]
+        public string First_Name { get; set; }
+        public string StartDate { get; set; }
+
     }
 }

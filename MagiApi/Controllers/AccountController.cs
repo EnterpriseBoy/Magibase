@@ -1,6 +1,7 @@
 ﻿using MagiApi.Models.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,28 +12,29 @@ namespace MagiApi.Controllers
 {
 
     [ApiController]
-    public class AuthenticateController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AuthenticateController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        //[HttpGet("{id}", Name = "GetEvent")]
         [HttpGet]
-        [Route("api/get")]
-        public ContentResult CheckThisWorks()
+        [AllowAnonymous]
+        [Route("api/test")]
+        public ContentResult Test()
         {
-            return Content("This works");
+            return Content("asd");
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("api/register")]
-        public async Task<ContentResult> Register([FromBody] UserAccess userAccess)
+        public async Task<ContentResult> Register([FromBody] Login userAccess)
         {
             if (ModelState.IsValid)
             {
@@ -56,25 +58,26 @@ namespace MagiApi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("api/login")]
-        public async Task<ContentResult> Login([FromBody] UserAccess credentials)
+        public async Task<IActionResult> Login([FromBody] Login credentials)
         {
 
             if (!ModelState.IsValid || credentials == null)
             {
-                return Content("Login failed" );
+                return Unauthorized();
             }
 
             var identityUser = await _userManager.FindByNameAsync(credentials.Username);
             if (identityUser == null)
             {
-                return Content("Login failed");
+                return Unauthorized();
             }
 
             var result = _userManager.PasswordHasher.VerifyHashedPassword(identityUser, identityUser.PasswordHash, credentials.Password);
             if (result == PasswordVerificationResult.Failed)
             {
-                return Content("Login failed");
+                return Unauthorized();
             }
 
             var claims = new List<Claim>
@@ -90,21 +93,7 @@ namespace MagiApi.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
 
-            return Content("Login failed");
-
-
-            //if (ModelState.IsValid)
-            //{
-            //    var result = await _signInManager.PasswordSignInAsync(userAccess.Username,userAccess.Password,false,false);
-
-            //    if (result.Succeeded)
-            //    {
-            //        return Content("you are signed in");
-            //    }
-
-            //    return Content("login Failed");
-            //}
-            //return Content("Feck off");
+            return Content("Well done you are logged in");
         }
 
     }

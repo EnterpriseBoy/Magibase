@@ -13,6 +13,8 @@ using System;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace MagiApi
 {
@@ -27,9 +29,11 @@ namespace MagiApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(setupAction =>
+            services.AddControllers(options =>
             {
-                setupAction.ReturnHttpNotAcceptable = true;
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+                options.ReturnHttpNotAcceptable = true;
             }).AddXmlDataContractSerializerFormatters();
 
             services.AddDbContext<EventStaffContext>(options =>
